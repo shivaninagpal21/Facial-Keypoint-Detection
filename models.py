@@ -3,7 +3,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-# can use the below import should you choose to initialize the weights of your Net
+# can use the below import to initialize the weights of your Net
 import torch.nn.init as I
 
 
@@ -12,13 +12,13 @@ class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
         
-        ## TODO: Define all the layers of this CNN, the only requirements are:
+        ## Define all the layers of this CNN, the only requirements are:
         ## 1. This network takes in a square (same width and height), grayscale image as input
         ## 2. It ends with a linear layer that represents the keypoints
-        ## it's suggested that you make this last layer output 136 values, 2 for each of the 68 keypoint (x, y) pairs
+        ## The last layer output should have 136 values, 2 for each of the 68 keypoint (x, y) pairs
         
-        # As an example, you've been given a convolutional layer, which you may (but don't have to) change:
-        # 1 input image channel (grayscale), 32 output channels/feature maps, 5x5 square convolution kernel
+       
+        # 1 input image channel (grayscale), 32 output channels/feature maps, 3x3 square convolution kernel
         self.conv1 = nn.Conv2d(1, 32, 3)
         I.xavier_normal_(self.conv1.weight)
         self.pool = nn.MaxPool2d(2, 2)
@@ -26,9 +26,11 @@ class Net(nn.Module):
         self.conv2 = nn.Conv2d(32, 64, 3)
         
         self.conv3 = nn.Conv2d(64, 128, 3)
+        # dropout layer to avoid overfitting
         self.conv3_drop = nn.Dropout(p=0.3)
         
         self.conv4 = nn.Conv2d(128, 256, 3)
+        # Another dropout layer to avoid overfitting
         self.conv4_drop = nn.Dropout(p=0.4)
         
         self.fc1 = nn.Linear(256*12*12, 136)
@@ -36,15 +38,12 @@ class Net(nn.Module):
         
         #self.fc2 = nn.Linear(50, 136)
         
-        ## Note that among the layers to add, consider including:
-        # maxpooling layers, multiple conv layers, fully-connected layers, and other layers (such as dropout or batch normalization) to avoid overfitting
         
 
         
     def forward(self, x):
-        ## TODO: Define the feedforward behavior of this model
-        ## x is the input image and, as an example, here you may choose to include a pool/conv step:
-        ## x = self.pool(F.relu(self.conv1(x)))
+        ## Define the feedforward behavior of this model
+        ## x is the input image
         #x = self.conv1(x)
         x = self.pool(F.relu(self.conv1(x)))
         x = self.pool(F.relu(self.conv2(x)))
@@ -56,7 +55,6 @@ class Net(nn.Module):
         x = x.view(x.size(0), -1)
         
         # 1 linear(Fully connected) layer 
-        # Also add a Batch Norm layer later
         #x = F.relu(self.fc1(x))
         #x = self.fc1_drop(x)
         x = self.fc1(x)
