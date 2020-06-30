@@ -1,2 +1,2 @@
 # Facial-Keypoint-Detection
-Pytorch implementation of a  Convolutional Neural Network that successfully detects facial keypoints. 
+Pytorch implementation of a Convolutional Neural Network to perform Facial Keypoints Detection. Each train and test image consisted of 68 keypoints with coordinates (x,y) for that face. These keypoints essentially mark the important areas of the face like the eyes, nose, mouth corners, etc. The facial keypoints dataset used had 5770 color images. 3462 of these images were used to train the model and the rest were used to test the model. The model was trained for 30 epochs and a batch size of 10. As for Loss and Optimization Functions; MSE and Adam Optimizer with a learning rate of 0.0001 were respectively used.  
